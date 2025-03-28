@@ -1,0 +1,38 @@
+basePath: /api/v1
+host: localhost:8000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Finpay Realtime Transaction API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Finpay Realtime Transaction API
+  version: "1.0"
+paths:
+  /auth/login:
+    get:
+      consumes:
+      - application/json
+      description: Login user
+      produces:
+      - application/json
+      responses: {}
+      summary: Login
+      tags:
+      - Auth
+  /auth/register:
+    get:
+      consumes:
+      - application/json
+      description: Register new user
+      produces:
+      - application/json
+      responses: {}
+      summary: Register
+      tags:
+      - Auth
+swagger: "2.0"
