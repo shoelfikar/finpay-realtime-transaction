@@ -32,22 +32,23 @@ func (u *userRepository) CreateUser(user *model.User) *model.User {
 
    defer tx.Commit()
    query := `
-      INSERT INTO users (usernmae, email, password, status, created_by)
+      INSERT INTO users (username, email, password, status, created_by)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING id;
    `
-   result, err := tx.ExecContext(ctx, query, &user.Username, &user.Email, &user.Password, &user.Status, &user.CreatedBy)
+   _, err = tx.ExecContext(ctx, query, &user.Username, &user.Email, &user.Password, &user.Status, &user.CreatedBy)
 
    if err != nil {
-      panic("Error insert user"+ err.Error())
+      panic("Error insert user "+ err.Error())
    }
 
-   id, err := result.LastInsertId()
-   if err != nil {
-      panic("Error get user id"+ err.Error())
-   }
+   // id, err := result.LastInsertId()
+   // if err != nil {
+   //    panic("Error get user id"+ err.Error())
+   // }
 
-   user.Id = int(id)
+   // user.Id = int(id)
+   user.Password = nil
 
    return user
 }

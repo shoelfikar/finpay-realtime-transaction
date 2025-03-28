@@ -4,10 +4,12 @@ import (
 	"database/sql"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/shoelfikar/finpay-realtime-transaction/controller"
+	"github.com/shoelfikar/finpay-realtime-transaction/repository"
+	"github.com/shoelfikar/finpay-realtime-transaction/services"
 	// "github.com/shoelfikar/finpay-realtime-transaction/middleware"
 )
 
@@ -32,11 +34,18 @@ func SetupRoutes(DB *sql.DB) *fiber.App {
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 
+	// Auth Controller
+	userRepo := repository.NewUserRepository(DB)
+	userService := services.NewUserService(userRepo)
+	authController := controller.NewAuthController(userService)
+
+
 
 	nonAuth := router.Group("/api/v1")
 	// api := router.Group("/api/v1", middleware.JWTMiddleware)
 
-	nonAuth.Get("/auth/login", controller.Login)
+	nonAuth.Post("/auth/login", authController.Login)
+	nonAuth.Post("/auth/register", authController.Register)
 
 	return router
 }

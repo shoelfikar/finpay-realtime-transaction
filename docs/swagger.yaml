@@ -1,4 +1,23 @@
 basePath: /api/v1
+definitions:
+  model.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  model.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      retype_password:
+        type: string
+      username:
+        type: string
+    type: object
 host: localhost:8000
 info:
   contact:
@@ -14,10 +33,17 @@ info:
   version: "1.0"
 paths:
   /auth/login:
-    get:
+    post:
       consumes:
       - application/json
       description: Login user
+      parameters:
+      - description: User Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
       produces:
       - application/json
       responses: {}
@@ -25,10 +51,17 @@ paths:
       tags:
       - Auth
   /auth/register:
-    get:
+    post:
       consumes:
       - application/json
       description: Register new user
+      parameters:
+      - description: User Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterRequest'
       produces:
       - application/json
       responses: {}

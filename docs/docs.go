@@ -25,7 +25,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/auth/login": {
-            "get": {
+            "post": {
                 "description": "Login user",
                 "consumes": [
                     "application/json"
@@ -37,11 +37,22 @@ const docTemplate = `{
                     "Auth"
                 ],
                 "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "User Data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginRequest"
+                        }
+                    }
+                ],
                 "responses": {}
             }
         },
         "/auth/register": {
-            "get": {
+            "post": {
                 "description": "Register new user",
                 "consumes": [
                     "application/json"
@@ -53,7 +64,48 @@ const docTemplate = `{
                     "Auth"
                 ],
                 "summary": "Register",
+                "parameters": [
+                    {
+                        "description": "User Data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RegisterRequest"
+                        }
+                    }
+                ],
                 "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "model.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.RegisterRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "retype_password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
             }
         }
     }
