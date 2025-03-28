@@ -93,7 +93,6 @@ func (a *authController) Register(c *fiber.Ctx) error {
    }
 
    user := &model.User{
-      Username: request.Username,
       Password: &request.Password,
       Email: request.Email,
       Status: 1,

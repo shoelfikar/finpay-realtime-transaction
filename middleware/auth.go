@@ -22,7 +22,6 @@ func GenerateJWT(user *model.User) (string, error) {
 	claims["authorized"] = true
 	claims["exp"] = time.Now().Add(time.Minute * expMins).Unix()
 	claims["user_id"] = user.Id
-	claims["username"] = user.Username
 
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {

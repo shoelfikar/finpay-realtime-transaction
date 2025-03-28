@@ -32,11 +32,11 @@ func (u *userRepository) CreateUser(user *model.User) *model.User {
 
    defer tx.Commit()
    query := `
-      INSERT INTO users (username, email, password, status, created_by)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO users (email, password, status, created_by)
+      VALUES ($1, $2, $3, $4)
       RETURNING id;
    `
-   _, err = tx.ExecContext(ctx, query, &user.Username, &user.Email, &user.Password, &user.Status, &user.CreatedBy)
+   _, err = tx.ExecContext(ctx, query, &user.Email, &user.Password, &user.Status, &user.CreatedBy)
 
    if err != nil {
       panic("Error insert user "+ err.Error())
@@ -60,7 +60,7 @@ func (u *userRepository) GetUserByID(userId int) *model.User {
    `
 
    var user model.User
-   result := u.DB.QueryRowContext(ctx, query, &userId).Scan(&user.Id, &user.Username, &user.Email, &user.Role, &user.Status, &user.CreatedAt, &user.UpdatedAt, &user.CreatedBy)
+   result := u.DB.QueryRowContext(ctx, query, &userId).Scan(&user.Id, &user.Email, &user.Role, &user.Status, &user.CreatedAt, &user.UpdatedAt, &user.CreatedBy)
 
    if result == sql.ErrNoRows {
       return nil
@@ -76,7 +76,7 @@ func (u *userRepository) GetUserByEmail(email string) *model.User {
    `
 
    var user model.User
-   result := u.DB.QueryRowContext(ctx, query, &email).Scan(&user.Username, &user.Email, &user.Password, &user.Status, &user.Role, &user.Id, &user.CreatedAt, &user.UpdatedAt, &user.CreatedBy)
+   result := u.DB.QueryRowContext(ctx, query, &email).Scan(&user.Email, &user.Password, &user.Status, &user.Role, &user.Id, &user.CreatedAt, &user.UpdatedAt, &user.CreatedBy)
 
    if result == sql.ErrNoRows {
       return nil
