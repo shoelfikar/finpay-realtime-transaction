@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/shoelfikar/finpay-realtime-transaction/controller"
+	"github.com/shoelfikar/finpay-realtime-transaction/model"
 	"github.com/shoelfikar/finpay-realtime-transaction/repository"
 	"github.com/shoelfikar/finpay-realtime-transaction/services"
 	// "github.com/shoelfikar/finpay-realtime-transaction/middleware"
@@ -17,6 +18,13 @@ func SetupRoutes(DB *sql.DB) *fiber.App {
 
 	router := fiber.New(fiber.Config{
 		AppName: "Finpay - Realtime Transaction",
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			return c.Status(fiber.StatusInternalServerError).JSON(model.ResponseJSON{
+				Error: "Internal Server Error",
+				Success: "false",
+				Data: struct{}{},
+			})
+		},
 	})
 
 	router.Use(recover.New())

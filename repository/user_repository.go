@@ -42,12 +42,6 @@ func (u *userRepository) CreateUser(user *model.User) *model.User {
       panic("Error insert user "+ err.Error())
    }
 
-   // id, err := result.LastInsertId()
-   // if err != nil {
-   //    panic("Error get user id"+ err.Error())
-   // }
-
-   // user.Id = int(id)
    user.Password = nil
 
    return user
@@ -56,7 +50,8 @@ func (u *userRepository) CreateUser(user *model.User) *model.User {
 func (u *userRepository) GetUserByID(userId int) *model.User {
    ctx := context.Background()
    query := `
-      SELECT * FROM users WHERE id = $1
+      SELECT id, email, role, status, created_at, updated_at, created_by 
+      FROM users WHERE id = $1
    `
 
    var user model.User
@@ -72,7 +67,8 @@ func (u *userRepository) GetUserByID(userId int) *model.User {
 func (u *userRepository) GetUserByEmail(email string) *model.User {
    ctx := context.Background()
    query := `
-      SELECT * FROM users WHERE email = $1
+      SELECT id, email, password, status, role, created_at, created_by, updated_at 
+      FROM users WHERE email = $1
    `
 
    var user model.User
