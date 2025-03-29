@@ -7,7 +7,7 @@ ENV GOFLAGS=-mod=vendor
 RUN apk add --no-cache tzdata
 ENV TZ=Asia/Jakarta
 
-WORKDIR '/app'
+WORKDIR '/finpay-transaction'
 
 COPY go.mod .
 COPY go.sum .
@@ -20,7 +20,7 @@ RUN go mod verify
 
 
 # RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
-RUN go build -o server
+RUN go build -o finpay
 EXPOSE 8000
 
-CMD ["./server"]
+CMD ["./finpay"]
