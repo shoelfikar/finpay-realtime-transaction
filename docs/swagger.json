@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8000",
+    "host": "localhost:5001",
     "basePath": "/api/v1",
     "paths": {
         "/auth/login": {
@@ -33,7 +33,7 @@
                 "summary": "Login",
                 "parameters": [
                     {
-                        "description": "User Data",
+                        "description": "Login",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -60,7 +60,7 @@
                 "summary": "Register",
                 "parameters": [
                     {
-                        "description": "User Data",
+                        "description": "Register",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -76,12 +76,17 @@
     "definitions": {
         "model.LoginRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 5
                 }
             }
         },

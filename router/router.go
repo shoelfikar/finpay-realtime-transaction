@@ -3,6 +3,7 @@ package routes
 import (
 	"database/sql"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -15,6 +16,8 @@ import (
 )
 
 func SetupRoutes(DB *sql.DB) *fiber.App {
+
+	validator := validator.New()
 
 	router := fiber.New(fiber.Config{
 		AppName: "Finpay - Realtime Transaction",
@@ -45,7 +48,7 @@ func SetupRoutes(DB *sql.DB) *fiber.App {
 	// Auth Controller
 	userRepo := repository.NewUserRepository(DB)
 	userService := services.NewUserService(userRepo)
-	authController := controller.NewAuthController(userService)
+	authController := controller.NewAuthController(userService, validator)
 
 
 

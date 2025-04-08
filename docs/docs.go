@@ -39,7 +39,7 @@ const docTemplate = `{
                 "summary": "Login",
                 "parameters": [
                     {
-                        "description": "User Data",
+                        "description": "Login",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -66,7 +66,7 @@ const docTemplate = `{
                 "summary": "Register",
                 "parameters": [
                     {
-                        "description": "User Data",
+                        "description": "Register",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -82,12 +82,17 @@ const docTemplate = `{
     "definitions": {
         "model.LoginRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 5
                 }
             }
         },
@@ -114,7 +119,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8000",
+	Host:             "localhost:5001",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Swagger Finpay Realtime Transaction API",

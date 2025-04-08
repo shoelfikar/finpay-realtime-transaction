@@ -22,7 +22,7 @@ import (
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host      localhost:8000
+// @host      localhost:5001
 // @BasePath  /api/v1
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 
    router.Get("/swagger/*", swagger.HandlerDefault)
 
-   err := router.Listen(":8000")
+   err := router.Listen(":5001")
 
    if err != nil {
       log.Fatalf("error running project %v", err)

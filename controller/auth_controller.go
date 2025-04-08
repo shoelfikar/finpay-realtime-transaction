@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/shoelfikar/finpay-realtime-transaction/model"
 	"github.com/shoelfikar/finpay-realtime-transaction/services"
@@ -11,6 +12,7 @@ import (
 
 type authController struct {
    UserService services.UserService
+   validate    *validator.Validate
 }
 
 type AuthController interface {
@@ -18,9 +20,10 @@ type AuthController interface {
    Register(c *fiber.Ctx) error
 }
 
-func NewAuthController(user services.UserService) AuthController {
+func NewAuthController(user services.UserService, validate *validator.Validate) AuthController {
    return &authController{
       UserService: user,
+      validate: validate,
    }
 }
 
@@ -35,7 +38,17 @@ func NewAuthController(user services.UserService) AuthController {
 func (a *authController) Login(c *fiber.Ctx) error {
    body := c.Body()
    var request model.LoginRequest
-   err := json.Unmarshal(body, &request)
+   err := a.validate.Struct(request)
+   if ok := utils.ValidationErrors(err); ok {
+      message := utils.GetErrorMessagevalidator(err)
+      return c.Status(fiber.StatusBadRequest).JSON(model.ResponseJSON{
+         Success: "false",
+         Message: "validation error",
+         ValidationError: message,
+      })
+   }
+
+   err = json.Unmarshal(body, &request)
    if err != nil {
       return err
    }

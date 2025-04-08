@@ -15,7 +15,7 @@ import (
 func GenerateJWT(user *model.User) (string, error) {
 	var expMins time.Duration = 2400
 	token := jwt.New(jwt.SigningMethodHS256)
-	jwtKey := os.Getenv("DB_HOST")
+	jwtKey := os.Getenv("JWT_SECRET")
 
 	claims := token.Claims.(jwt.MapClaims)
 

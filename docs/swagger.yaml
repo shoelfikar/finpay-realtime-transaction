@@ -5,7 +5,11 @@ definitions:
       email:
         type: string
       password:
+        minLength: 5
         type: string
+    required:
+    - email
+    - password
     type: object
   model.RegisterRequest:
     properties:
@@ -18,7 +22,7 @@ definitions:
       username:
         type: string
     type: object
-host: localhost:8000
+host: localhost:5001
 info:
   contact:
     email: support@swagger.io
@@ -38,7 +42,7 @@ paths:
       - application/json
       description: Login user
       parameters:
-      - description: User Data
+      - description: Login
         in: body
         name: request
         required: true
@@ -56,7 +60,7 @@ paths:
       - application/json
       description: Register new user
       parameters:
-      - description: User Data
+      - description: Register
         in: body
         name: request
         required: true

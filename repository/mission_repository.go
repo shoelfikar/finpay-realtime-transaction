@@ -21,5 +21,6 @@ func NewMissionRepository(db *sql.DB) MissionRepository {
 }
 
 func (m *missionRepository) CreateMission(mission model.Mission) model.Mission {
+	
 	return mission
 }
