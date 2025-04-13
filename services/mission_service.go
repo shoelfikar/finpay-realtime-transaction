@@ -10,7 +10,9 @@ type missionService struct {
 }
 
 type MissionService interface {
-	CreateMission(mission model.Mission) model.Mission
+	CreateMission(mission model.Missions) model.Missions
+	GetMissionByID(missionId int) model.Missions
+	GetAllMission() []*model.Missions
 }
 
 func NewMissionService(mission repository.MissionRepository) MissionService {
@@ -19,6 +21,17 @@ func NewMissionService(mission repository.MissionRepository) MissionService {
 	}
 }
 
-func (m *missionService) CreateMission(mission model.Mission) model.Mission {
-	return mission
+func (m *missionService) CreateMission(mission model.Missions) model.Missions {
+	result := m.MissionRepository.CreateMission(mission)
+	return result
+}
+
+func (m *missionService) GetMissionByID(missionId int) model.Missions {
+	mission := m.MissionRepository.GetMissionByID(missionId)
+	return *mission
+}
+
+func (m *missionService) GetAllMission() []*model.Missions {
+	missions := m.MissionRepository.GetAllMission()
+	return missions
 }

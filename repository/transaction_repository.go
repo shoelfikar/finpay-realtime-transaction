@@ -23,3 +23,7 @@ func NewTransactionRepository(db *sql.DB) TransactionRepository {
 func (t *transactionRepository) Transaction(trx model.Transaction) model.Transaction {
 	return trx
 }
+
+func (t *transactionRepository) TopUp(trx model.Transaction) model.Transaction {
+	return trx
+}

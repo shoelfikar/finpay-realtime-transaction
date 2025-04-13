@@ -5,9 +5,13 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/shoelfikar/finpay-realtime-transaction/middleware"
 	"github.com/shoelfikar/finpay-realtime-transaction/model"
 	"github.com/shoelfikar/finpay-realtime-transaction/services"
 	"github.com/shoelfikar/finpay-realtime-transaction/utils"
+
+
+   "github.com/google/uuid"
 )
 
 type authController struct {
@@ -38,7 +42,12 @@ func NewAuthController(user services.UserService, validate *validator.Validate) 
 func (a *authController) Login(c *fiber.Ctx) error {
    body := c.Body()
    var request model.LoginRequest
-   err := a.validate.Struct(request)
+   err := json.Unmarshal(body, &request)
+   if err != nil {
+      return err
+   }
+
+   err = a.validate.Struct(request)
    if ok := utils.ValidationErrors(err); ok {
       message := utils.GetErrorMessagevalidator(err)
       return c.Status(fiber.StatusBadRequest).JSON(model.ResponseJSON{
@@ -48,10 +57,7 @@ func (a *authController) Login(c *fiber.Ctx) error {
       })
    }
 
-   err = json.Unmarshal(body, &request)
-   if err != nil {
-      return err
-   }
+
 
    user := a.UserService.GetUserByEmail(request.Email)
    if user == nil {
@@ -70,10 +76,29 @@ func (a *authController) Login(c *fiber.Ctx) error {
          Data: struct{}{},
       })
    }
+
+   token, err := middleware.GenerateJWT(user, 2400)
+   if err != nil {
+      return c.Status(fiber.StatusBadRequest).JSON(model.ResponseJSON{
+         Message: "Error generate token",
+         Success: "false",
+         Data: struct{}{},
+      })
+   }
+
+   refreshToken, err := middleware.GenerateJWT(user, 4800)
+   if err != nil {
+      return c.Status(fiber.StatusBadRequest).JSON(model.ResponseJSON{
+         Message: "Error generate token",
+         Success: "false",
+         Data: struct{}{},
+      })
+   }
+
 	response := model.ResponseJSON{
       Message: "Login Success",
       Success: "true",
-      Data: struct{}{},
+      Data: fiber.Map{"token": token, "refresh_token": refreshToken},
    }
 
    return c.JSON(response)
@@ -105,18 +130,22 @@ func (a *authController) Register(c *fiber.Ctx) error {
       })
    }
 
+   id := uuid.New()
+
    user := &model.User{
+      Id: id.String(),
       Password: &request.Password,
       Email: request.Email,
+      PhoneNumber: request.PhoneNumber,
       Status: 1,
-      CreatedBy: request.Email,
+      CreatedBy: "system",
    }
 
    user = a.UserService.CreateUser(user)
    response := model.ResponseJSON{
       Message: "Register User Success",
       Success: "true",
-      Data: user,
+      Data: fiber.Map{"id": user.Id, "email": user.Email, "status": user.Status},
    }
 
    return c.JSON(response)

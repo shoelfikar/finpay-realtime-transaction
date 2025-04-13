@@ -1,8 +1,8 @@
 package model
 
 type Wallet struct {
-	Id        int    `json:"id"`
-	UserId    int    `json:"user_id"`
+	Id        string `json:"id"`
+	UserId    string `json:"user_id"`
 	Status    bool   `json:"status"`
 	Balance   int64  `json:"balance"`
 	Point     int64  `json:"point"`

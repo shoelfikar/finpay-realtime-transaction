@@ -11,16 +11,37 @@ definitions:
     - email
     - password
     type: object
+  model.MissionRequest:
+    properties:
+      condition: {}
+      name:
+        type: string
+      point:
+        type: integer
+      type:
+        type: string
+    required:
+    - condition
+    - name
+    - point
+    - type
+    type: object
   model.RegisterRequest:
     properties:
       email:
         type: string
       password:
         type: string
+      phone_number:
+        maxLength: 15
+        type: string
       retype_password:
         type: string
-      username:
-        type: string
+    required:
+    - email
+    - password
+    - phone_number
+    - retype_password
     type: object
 host: localhost:5001
 info:
@@ -72,4 +93,55 @@ paths:
       summary: Register
       tags:
       - Auth
+  /mission/all:
+    get:
+      consumes:
+      - application/json
+      description: Get All User Mission
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Get All User Mission
+      tags:
+      - Mission
+  /mission/create:
+    post:
+      consumes:
+      - application/json
+      description: Create User Mission
+      parameters:
+      - description: Mission
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.MissionRequest'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Create User Mission
+      tags:
+      - Mission
+  /user/detail:
+    get:
+      consumes:
+      - application/json
+      description: Get User Detail
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - BearerAuth: []
+      summary: Get User Detail
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

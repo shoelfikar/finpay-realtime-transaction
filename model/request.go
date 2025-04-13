@@ -6,8 +6,15 @@ type LoginRequest struct {
 }
 
 type RegisterRequest struct {
-	Email          string `json:"email"`
-	Username       string `json:"username"`
-	Password       string `json:"password"`
-	RetypePassword string `json:"retype_password"`
+	Email          string `json:"email" validate:"required,email"`
+	PhoneNumber    string `json:"phone_number" validate:"required,max=15"`
+	Password       string `json:"password" validate:"required"`
+	RetypePassword string `json:"retype_password" validate:"required"`
+}
+
+type MissionRequest struct {
+	Name      string      `json:"name" validate:"required"`
+	Type      string      `json:"type" validate:"required"`
+	Point     int         `json:"point" validate:"required"`
+	Condition interface{} `json:"condition,omitempty" validate:"required"`
 }

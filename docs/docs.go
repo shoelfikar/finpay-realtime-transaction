@@ -77,6 +77,80 @@ const docTemplate = `{
                 ],
                 "responses": {}
             }
+        },
+        "/mission/all": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get All User Mission",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mission"
+                ],
+                "summary": "Get All User Mission",
+                "responses": {}
+            }
+        },
+        "/mission/create": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create User Mission",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mission"
+                ],
+                "summary": "Create User Mission",
+                "parameters": [
+                    {
+                        "description": "Mission",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.MissionRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/detail": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get User Detail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get User Detail",
+                "responses": {}
+            }
         }
     },
     "definitions": {
@@ -96,8 +170,35 @@ const docTemplate = `{
                 }
             }
         },
+        "model.MissionRequest": {
+            "type": "object",
+            "required": [
+                "condition",
+                "name",
+                "point",
+                "type"
+            ],
+            "properties": {
+                "condition": {},
+                "name": {
+                    "type": "string"
+                },
+                "point": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
         "model.RegisterRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "password",
+                "phone_number",
+                "retype_password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -105,13 +206,21 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "retype_password": {
-                    "type": "string"
+                "phone_number": {
+                    "type": "string",
+                    "maxLength": 15
                 },
-                "username": {
+                "retype_password": {
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

@@ -12,10 +12,10 @@ import (
 )
 
 // GenerateJWT is func to generate the token
-func GenerateJWT(user *model.User) (string, error) {
-	var expMins time.Duration = 2400
+func GenerateJWT(user *model.User, exp time.Duration) (string, error) {
+	var expMins time.Duration = exp
 	token := jwt.New(jwt.SigningMethodHS256)
-	jwtKey := os.Getenv("JWT_SECRET")
+	jwtKey := []byte(os.Getenv("JWT_SECRET"))
 
 	claims := token.Claims.(jwt.MapClaims)
 

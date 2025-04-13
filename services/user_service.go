@@ -13,6 +13,7 @@ type userService struct {
 type UserService interface {
    CreateUser(user *model.User) *model.User
    GetUserByEmail(email string) *model.User
+   GetUserDetail(userId string) *model.User
 }
 
 func NewUserService(user repository.UserRepository) UserService {
@@ -35,5 +36,10 @@ func (u *userService) CreateUser(user *model.User) *model.User {
 
 func (u *userService) GetUserByEmail(email string) *model.User {
    user := u.UserRepository.GetUserByEmail(email)
+   return user
+}
+
+func (u *userService) GetUserDetail(userId string) *model.User {
+   user := u.UserRepository.GetUserByID(userId)
    return user
 }

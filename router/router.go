@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/shoelfikar/finpay-realtime-transaction/controller"
+	"github.com/shoelfikar/finpay-realtime-transaction/middleware"
 	"github.com/shoelfikar/finpay-realtime-transaction/model"
 	"github.com/shoelfikar/finpay-realtime-transaction/repository"
 	"github.com/shoelfikar/finpay-realtime-transaction/services"
@@ -49,14 +50,25 @@ func SetupRoutes(DB *sql.DB) *fiber.App {
 	userRepo := repository.NewUserRepository(DB)
 	userService := services.NewUserService(userRepo)
 	authController := controller.NewAuthController(userService, validator)
+	userController := controller.NewUserController(userService, validator)
+
+	// Mission Controller
+	missionRepo := repository.NewMissionRepository(DB)
+	missionService := services.NewMissionService(missionRepo)
+	missionController := controller.NewMissionController(missionService, validator)
 
 
 
 	nonAuth := router.Group("/api/v1")
-	// api := router.Group("/api/v1", middleware.JWTMiddleware)
-
+	
 	nonAuth.Post("/auth/login", authController.Login)
 	nonAuth.Post("/auth/register", authController.Register)
+	
+	api := router.Group("/api/v1", middleware.JWTMiddleware)
+	api.Get("/user/detail", userController.GetUserDetail)
+
+	api.Post("/mission/create", missionController.CreateMission)
+	api.Get("/mission/all", missionController.GetAllMission)
 
 	return router
 }
